@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrishnaRAG - Bhagavad Gita AI Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="background-gradient"></div>
+  
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">🕉️</span>
+        <h1>Krishna RAG</h1>
+      </div>
+      <p class="tagline">Wisdom from the Bhagavad Gita at Your Fingertips</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="main-content">
+      <!-- Question Section -->
+      <section class="question-section">
+        <div class="section-header">
+          <h2>Ask a Question</h2>
+          <p class="section-description">Explore the teachings of the Bhagavad Gita with AI-powered insights</p>
+        </div>
+        
+        <div class="input-wrapper">
+          <textarea 
+            id="question" 
+            placeholder="What does the Gita teach about dharma? Ask anything about the sacred text..."
+            rows="4"
+            class="question-input"></textarea>
+          <div class="char-count">
+            <span id="charCount">0</span>/500
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="ask" class="btn btn-primary">
+            <span class="btn-icon">✨</span>
+            Ask AI
+          </button>
+          <button id="build" class="btn btn-secondary">
+            <span class="btn-icon">🔨</span>
+            Build Index
+          </button>
+        </div>
+      </section>
+
+      <!-- Response Section -->
+      <section id="response" class="response-section hidden">
+        <!-- Answer -->
+        <div class="answer-card">
+          <div class="card-header">
+            <h3>🧠 AI Answer</h3>
+            <button class="copy-btn" title="Copy answer">📋</button>
+          </div>
+          <pre id="answer" class="answer-text">(no answer yet)</pre>
+        </div>
+
+        <!-- Retrieved Snippets -->
+        <div class="snippets-section">
+          <div class="card-header">
+            <h3>📚 Retrieved Passages</h3>
+            <span class="snippet-count" id="snippetCount">0</span>
+          </div>
+          <div id="retrieved" class="snippets-container"></div>
+        </div>
+      </section>
+
+      <!-- Loading Indicator -->
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Consulting the Gita...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>🙏 GitaRAG - Powered by Local RAG & AI</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
