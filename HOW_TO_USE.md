@@ -4,39 +4,28 @@
 
 ---
 
-## STEP 1️⃣: Install Ollama
+## STEP 1️⃣: Configure Google Gemini
 
-### What is Ollama?
-Ollama is the local AI service that powers your questions. Think of it as a private AI assistant running on your computer.
+### What is Google Gemini?
+Google Gemini (Generative Language API) is Google's hosted LLM service. This project now uses the Gemini API via the `google-generativeai` SDK. You must provide a valid API key in the environment variable `GEMINI_API_KEY`.
 
-### Installation Steps:
+### Quick setup
+1. Obtain a Gemini API key from Google Cloud and set it in your environment:
 
-#### **Windows:**
-1. Go to https://ollama.ai/download
-2. Click "Download for Windows"
-3. Run the installer (OllamaSetup.exe)
-4. Follow the prompts
-5. Ollama will start automatically
-
-#### **Mac:**
-1. Go to https://ollama.ai/download
-2. Click "Download for Mac"
-3. Open the DMG file
-4. Drag Ollama to Applications
-5. Open Applications → Ollama
-
-#### **Linux:**
-```bash
-curl https://ollama.ai/install.sh | sh
+```powershell
+setx GEMINI_API_KEY "<YOUR_GEMINI_API_KEY>"
+# Restart your shell after setting the env var
 ```
 
-### ✅ Verify Installation:
-Open PowerShell/Terminal and type:
-```bash
-ollama --version
+2. Install Python dependencies and the SDK:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Should show version number. If yes, you're good! ✅
+3. Verify the backend can contact Gemini by starting the backend and calling `/llm/status` or `/llm/test` (see API docs).
 
 ---
 

@@ -15,7 +15,7 @@ class GeminiLLMClient:
     
     def __init__(
         self,
-        model_name: str = "gemini-1.0-pro",  # <--- FIX
+        model_name: str = "gemini-2.0-flash",
         api_key: str = None,
         timeout: int = 60
     ):
@@ -37,8 +37,41 @@ class GeminiLLMClient:
         
         # Configure Gemini API
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel(model_name)
-        logger.info(f"Gemini client initialized with model: {model_name}")
+        
+        # Ensure model name doesn't have "models/" prefix for GenerativeModel
+        clean_model = model_name.replace("models/", "") if model_name else "gemini-1.5-flash"
+        
+        # Try to initialize the requested model; if unavailable, list models and pick one
+        try:
+            self.model = genai.GenerativeModel(clean_model)
+            self.model_name = clean_model
+            logger.info(f"Gemini client initialized with model: {clean_model}")
+        except Exception as e:
+            logger.warning(f"Initial model {clean_model} not available: {e}. Attempting to list available models...")
+            try:
+                available = genai.list_models()
+                model_candidates = []
+                for m in available:
+                    if isinstance(m, dict) and m.get('name'):
+                        name = m['name'].replace("models/", "")
+                        model_candidates.append(name)
+                    elif isinstance(m, str):
+                        name = m.replace("models/", "")
+                        model_candidates.append(name)
+                # Prefer gemini models
+                preferred = [m for m in model_candidates if 'gemini' in m.lower()]
+                if preferred:
+                    chosen = preferred[0]
+                elif model_candidates:
+                    chosen = model_candidates[0]
+                else:
+                    chosen = "gemini-1.5-flash"
+                self.model_name = chosen
+                self.model = genai.GenerativeModel(chosen)
+                logger.info(f"Gemini client initialized with fallback model: {chosen}")
+            except Exception as e2:
+                logger.error(f"Failed to find any working Gemini model: {e2}")
+                raise
     
     def is_available(self) -> bool:
         """Check if Gemini API is available"""
@@ -192,7 +225,7 @@ _gemini_client: Optional[GeminiLLMClient] = None
 
 
 def get_gemini_client(
-    model_name: str = "gemini-1.0-pro",  # <--- FIX
+    model_name: str = "gemini-2.0-flash",
     api_key: str = None
 ) -> GeminiLLMClient:
     """Get or create Gemini client"""

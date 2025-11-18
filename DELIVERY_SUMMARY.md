@@ -33,12 +33,11 @@
 ✅ Gita-specific prompts
 ```
 
-### 🤖 Local LLM Integration
+### 🤖 LLM Integration (Google Gemini)
 ```
-✅ Ollama client library
-✅ Multi-model support (Mistral, Llama2, Neural-Chat, etc.)
+✅ Gemini client adapter (`backend/gemini_llm.py`)
+✅ Model listing and fallback selection
 ✅ Connection testing
-✅ Model enumeration
 ✅ Flexible parameters (temperature, tokens, etc.)
 ✅ Error handling
 ✅ Graceful fallback
@@ -90,10 +89,10 @@
 - Startup events
 - Service monitoring
 
-**File:** `backend/local_llm.py` (250+ lines)
-- LocalLLMClient class
-- Ollama integration
-- Model management
+**File:** `backend/gemini_llm.py` (250+ lines)
+- GeminiLLMClient class
+- Google Gemini integration (uses `GEMINI_API_KEY`)
+- Model management and fallback
 - Text generation
 - Chat support
 - Connection testing
@@ -184,13 +183,8 @@ python-dotenv==1.0.0
 
 ## 🎯 How to Use (Quick Start)
 
-### Step 1: Install Ollama
-Download from https://ollama.ai/download and run installer
-
-### Step 2: Pull Model
-```bash
-ollama pull mistral
-```
+### Step 1: Configure Google Gemini API
+Set the `GEMINI_API_KEY` environment variable and install dependencies. See `SETUP_GUIDE.md` for detailed steps.
 
 ### Step 3: Setup Python
 ```bash

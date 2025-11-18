@@ -12,8 +12,8 @@
 ## ✅ Implementation Checklist
 
 ### Backend Development
-- [x] Local LLM Client (`local_llm.py`)
-  - [x] Ollama integration
+- [x] LLM Client (`gemini_llm.py`)
+  - [x] Google Gemini integration (via `GEMINI_API_KEY`)
   - [x] Model management
   - [x] Text generation
   - [x] Chat support
@@ -90,9 +90,9 @@
 
 ## 📁 Files Created/Modified
 
-### New Files Created (13)
+### New/Updated Files (selection)
 ```
-✅ backend/local_llm.py               - LLM client
+✅ backend/gemini_llm.py              - Gemini LLM client
 ✅ backend/rag_engine.py              - RAG engine
 ✅ SETUP_GUIDE.md                     - Installation guide
 ✅ API_DOCUMENTATION.md               - API reference

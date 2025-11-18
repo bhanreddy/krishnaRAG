@@ -4,7 +4,7 @@
 
 GitaRAG is an AI-powered Q&A system for the Bhagavad Gita that combines:
 - **RAG (Retrieval-Augmented Generation)**: Uses semantic search to find relevant passages
-- **Local LLM Integration**: Uses Ollama or other local LLM services for intelligent answers
+- **LLM Integration**: Uses Google Gemini (Generative Language API) via `GEMINI_API_KEY` and the `google-generativeai` SDK
 - **Modern UI**: Beautiful, responsive web interface
 
 ## Architecture
@@ -16,54 +16,37 @@ FastAPI Backend
     ↓
 RAG Engine (FAISS + Embeddings)
     ↓
-Local LLM Service (Ollama/LM Studio/etc)
+LLM Service (Google Gemini cloud)
 ```
 
 ## Prerequisites
 
 - **Python 3.8+**
 - **Node.js** (for frontend development - optional)
-- **Ollama or other local LLM service**
+- **Google Gemini API access** and a valid `GEMINI_API_KEY` environment variable
 - **At least 4GB RAM** for embeddings model
 - **Internet connection** (first run to download models)
 
 ## Installation Steps
 
-### 1. Install Ollama (Local LLM Service)
+### 1. Configure Google Gemini API
 
-#### Windows
-1. Download from: https://ollama.ai/download
-2. Run the installer
-3. Start Ollama: It will run in background automatically
+1. Get an API key from Google Cloud (Generative Language API) and set it in your environment:
 
-#### macOS
-```bash
-brew install ollama
+```powershell
+setx GEMINI_API_KEY "<YOUR_GEMINI_API_KEY>"
+# Restart your shell after setting the env var
 ```
 
-#### Linux
-```bash
-curl https://ollama.ai/install.sh | sh
+2. Install Python dependencies and the Google SDK:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-### 2. Pull a Model in Ollama
-
-Open terminal/PowerShell and run:
-
-```bash
-# Pull Mistral (Recommended - balanced, fast)
-ollama pull mistral
-
-# Or pull another model:
-ollama pull llama2
-ollama pull neural-chat
-ollama pull dolphin-mixtral
-```
-
-Check if running:
-```bash
-curl http://localhost:11434/api/tags
-```
+The backend uses the `gemini_llm.py` adapter which will list available models for your account and select a working model.
 
 ### 3. Setup Python Environment
 
@@ -116,8 +99,8 @@ INFO:     Started server process [12345]
 INFO:     Waiting for application startup.
 GitaRAG Backend Starting
 ================================================
-✓ LLM Service Connected: mistral at http://localhost:11434
-  Available models: mistral, llama2, neural-chat
+✓ Gemini API: connection test logged (model will vary by account)
+   Use `/llm/status` and `/llm/models` to inspect available models
 ================================================
 INFO:     Application startup complete
 INFO:     Uvicorn running on http://0.0.0.0:8000

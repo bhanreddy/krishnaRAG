@@ -2,27 +2,25 @@
 
 ## 🚀 One-Minute Setup
 
-```bash
-# 1. Install Ollama
-# Visit: https://ollama.ai/download
+```powershell
+# 1. Configure Google Gemini API key
+setx GEMINI_API_KEY "<YOUR_GEMINI_API_KEY>"
+# Restart your shell after setting the env var
 
-# 2. Pull model
-ollama pull mistral
-
-# 3. Setup Python (one time)
+# 2. Setup Python (one time)
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 
-# 4. Run backend
+# 3. Run backend
 cd backend
 python main.py
 
-# 5. Run frontend (new terminal)
+# 4. Run frontend (new terminal)
 cd frontend
 python -m http.server 3000
 
-# 6. Open browser
+# 5. Open browser
 # http://localhost:3000
 ```
 
@@ -103,18 +101,8 @@ print(f"Sources: {len(data['retrieved'])} passages")
 
 ## 🔧 Configuration
 
-### Change LLM Model
-```bash
-ollama pull llama2
-set LLM_MODEL=llama2
-python main.py
-```
-
-### Available Models
-- `mistral` - Fast, good quality (default)
-- `llama2` - Popular, capable
-- `neural-chat` - Optimized for chat
-- `dolphin-mixtral` - High quality
+### Change Model / Provider
+This project uses Google Gemini via `gemini_llm.py`. To change which model is used, update the model name inside `backend/gemini_llm.py` or add environment-based configuration. Use `/llm/models` to see the models available to your API key.
 
 ---
 
@@ -122,11 +110,10 @@ python main.py
 
 | Problem | Solution |
 |---------|----------|
-| LLM not available | `ollama serve` |
-| Model not found | `ollama pull mistral` |
-| Slow responses | Reduce max_tokens to 256 |
+| LLM not available | Ensure `GEMINI_API_KEY` is set and valid; check `/llm/status` |
+| Slow responses | Reduce `max_tokens` to 256 |
 | Connection refused | Check backend is running |
-| API not responding | Check Ollama is running |
+| API not responding | Check network connectivity and API key permissions |
 
 See `SETUP_GUIDE.md` for detailed troubleshooting.
 
@@ -196,8 +183,9 @@ start_frontend.bat       - Frontend launcher
 
 ## ✅ Checklist
 
-- [ ] Ollama installed
-- [ ] Model pulled (`ollama pull mistral`)
+- [ ] `GEMINI_API_KEY` set
+- [ ] Python venv created
+- [ ] Dependencies installed
 - [ ] Python venv created
 - [ ] Dependencies installed
 - [ ] Backend running (`python main.py`)

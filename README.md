@@ -7,7 +7,7 @@
 GitaRAG is a modern, intelligent question-answering system for the Bhagavad Gita that combines:
 
 - **RAG (Retrieval-Augmented Generation)**: Semantic search to find relevant passages
-- **Local LLM Integration**: Uses Ollama or other local LLM services for intelligent responses
+- **LLM Integration**: Uses Google Gemini via the `GEMINI_API_KEY` and the `google-generativeai` SDK
 - **Beautiful Web UI**: Modern, responsive interface with smooth animations
 - **Zero Privacy Concerns**: Everything runs locally on your machine
 
@@ -25,14 +25,21 @@ GitaRAG is a modern, intelligent question-answering system for the Bhagavad Gita
 
 ### Prerequisites
 - Python 3.8+
-- Ollama (https://ollama.ai/download)
+- Google Gemini API access and `GEMINI_API_KEY` environment variable
 - 4GB RAM minimum
 
 ### Installation
 
-1. **Install Ollama and pull a model**
-```bash
-ollama pull mistral
+1. **Set your Google Gemini API key**
+```powershell
+setx GEMINI_API_KEY "<YOUR_GEMINI_API_KEY>"
+# Restart your shell after setting the env var
+```
+2. **Install Python dependencies**
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 2. **Setup Python environment**
@@ -123,25 +130,18 @@ Local LLM (Ollama: Mistral, Llama2, etc.)
 
 ## ⚙️ Configuration
 
-### Change LLM Model
-```bash
-ollama pull llama2
-set LLM_MODEL=llama2
-python main.py
-```
-
-Available models: `mistral`, `llama2`, `neural-chat`, `dolphin-mixtral`
+### Change LLM / Model
+This project now uses Google Gemini models via the `google-generativeai` SDK. To change the model used by the backend, set the model name in `backend/gemini_llm.py` or via the environment variable used by your deployment (if you add such support). The `gemini_llm.py` includes fallback logic and will list available models for your account.
 
 ## 🚨 Troubleshooting
 
 ### LLM Service Not Available
-```bash
-# Start Ollama
-ollama serve
+If the backend reports the LLM is not available, verify:
+- You have set the `GEMINI_API_KEY` environment variable and restarted your shell.
+- Your machine has internet access to reach Google's Generative Language API.
+- The key is valid and has access to the requested models.
 
-# Or pull model if missing
-ollama pull mistral
-```
+Use the `/llm/status` and `/llm/models` endpoints to debug available models and connection status.
 
 ### Slow Responses
 - Use faster model: `neural-chat`
@@ -212,7 +212,7 @@ See `SETUP_GUIDE.md` for detailed troubleshooting.
 ## 🙏 Acknowledgments
 
 - Bhagavad Gita - Ancient sacred text
-- Ollama - Local LLM infrastructure
+-- Google Gemini (Generative Language API)
 - FastAPI - Modern Python web framework
 - Sentence Transformers - Semantic embeddings
 - FAISS - Efficient vector search

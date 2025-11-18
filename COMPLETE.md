@@ -7,7 +7,7 @@
 #### 1. **Local LLM Client** (`backend/local_llm.py`)
 ```python
 LocalLLMClient class
-├── connect to Ollama/LM Studio
+├── connect to Google Gemini (Generative Language API)
 ├── list available models
 ├── generate text with parameters
 ├── chat support
@@ -16,7 +16,7 @@ LocalLLMClient class
 ```
 
 **Features:**
-- Supports Ollama and generic LLM APIs
+- Supports Google Gemini (via `GEMINI_API_KEY`) and generic LLM adapters
 - Model enumeration
 - Flexible temperature/top_p/token control
 - Graceful error handling

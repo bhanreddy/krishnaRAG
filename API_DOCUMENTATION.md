@@ -314,7 +314,7 @@ curl http://localhost:8000/llm/models
 |--------|-------|----------|
 | 400 | "Question cannot be empty" | Provide a non-empty question |
 | 500 | "RAG Engine not initialized" | Backend not started properly |
-| 500 | "LLM service not available" | Start Ollama: `ollama serve` |
+| 500 | "LLM service not available" | Ensure `GEMINI_API_KEY` is set and valid; check `/llm/status` |
 | 500 | "Index build failed" | Check corpus file exists |
 
 ---

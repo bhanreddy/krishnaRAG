@@ -4,9 +4,9 @@
 
 ### Core Components
 
-#### 1. **Local LLM Integration** (`backend/local_llm.py`)
-- ✅ `LocalLLMClient` class for Ollama and generic LLM APIs
-- ✅ Support for multiple LLM services (Ollama, LM Studio, etc.)
+#### 1. **LLM Integration (Google Gemini)** (`backend/gemini_llm.py`)
+- ✅ `GeminiLLMClient` class for Google Gemini (Generative Language API)
+- ✅ Support for listing available models and fallback selection
 - ✅ Model listing and availability checking
 - ✅ Flexible prompt and chat generation
 - ✅ Error handling and fallback mechanisms
@@ -20,11 +20,11 @@
 - chat() - Chat completion (if supported)
 ```
 
-#### 2. **Enhanced RAG Engine** (`backend/rag_engine.py`)
+-#### 2. **Enhanced RAG Engine** (`backend/rag_engine.py`)
 - ✅ `BhagavadGitaRAGEngine` class optimized for Gita Q&A
 - ✅ Semantic search using sentence-transformers + FAISS
 - ✅ Context-aware answer generation
-- ✅ Integration with local LLM
+- ✅ Integration with Google Gemini via `gemini_llm.py`
 - ✅ Fallback answers when LLM unavailable
 - ✅ Chat mode support
 - ✅ Bhagavad Gita-specific system prompts

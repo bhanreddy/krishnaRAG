@@ -1,4 +1,5 @@
 const API = 'http://127.0.0.1:8000';
+const API_TIMEOUT = 5000; // 5 second timeout
 
 // Character counter
 const questionInput = document.getElementById('question');
@@ -26,11 +27,18 @@ document.getElementById('ask').addEventListener('click', async () => {
   askBtn.disabled = true;
 
   try {
+    // Add timeout to fetch
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+
     const res = await fetch(API + '/query', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q, top_k: 3 })
+      body: JSON.stringify({ question: q, top_k: 3, temperature: 0.7, max_tokens: 512 }),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     if (!res.ok) {
       const t = await res.text();
@@ -38,7 +46,21 @@ document.getElementById('ask').addEventListener('click', async () => {
     }
 
     const j = await res.json();
-    document.getElementById('answer').textContent = j.answer || '(no answer)';
+    
+    // Display answer (now with "Krishna says:" prefix)
+    const answer = j.answer || '(no answer)';
+    document.getElementById('answer').textContent = answer;
+    
+    // Display response metadata with proper styling
+    const metadata = document.getElementById('metadata');
+    metadata.innerHTML = '';
+    if (j.passage_count > 0) {
+      metadata.className = 'metadata-info rag-retrieved';
+      metadata.textContent = `Context: ${j.passage_count} passage(s) retrieved`;
+    } else {
+      metadata.className = 'metadata-info pretrained';
+      metadata.textContent = 'Pretrained Answer (instant response)';
+    }
 
     const retrieved = document.getElementById('retrieved');
     retrieved.innerHTML = '';
@@ -46,19 +68,25 @@ document.getElementById('ask').addEventListener('click', async () => {
     const snippets = j.retrieved || [];
     document.getElementById('snippetCount').textContent = snippets.length;
 
-    snippets.forEach((txt, i) => {
-      const d = document.createElement('div');
-      d.className = 'snippet';
-      d.style.animationDelay = (i * 0.1) + 's';
-      d.innerHTML = '<strong>Passage ' + (i + 1) + '</strong><pre>' + 
-                    txt.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
-      retrieved.appendChild(d);
-    });
+    if (snippets.length > 0) {
+      snippets.forEach((txt, i) => {
+        const d = document.createElement('div');
+        d.className = 'snippet';
+        d.style.animationDelay = (i * 0.1) + 's';
+        d.innerHTML = '<strong>Passage ' + (i + 1) + '</strong><pre>' + 
+                      txt.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+        retrieved.appendChild(d);
+      });
+    }
 
     loading.classList.add('hidden');
     response.classList.remove('hidden');
   } catch (error) {
-    alert('Error: ' + error.message);
+    if (error.name === 'AbortError') {
+      alert('Request timeout. Make sure the backend is running at ' + API);
+    } else {
+      alert('Error: ' + error.message + '\n\nMake sure backend is running: python backend/main.py');
+    }
     loading.classList.add('hidden');
   } finally {
     askBtn.disabled = false;
